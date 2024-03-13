@@ -57,7 +57,7 @@ public class ListNewsScene extends BaseScene {
     private int index = 0;
 
     private final ListView<String> listView;
-    private TypeNews typeNews;
+    private TypeNews typeNews = TypeNews.ALL;
 
     public ListNewsScene(float width, float height, List<News> newsList, OnOpenWeb onOpenWeb) {
         super(new HBox(), width, height);

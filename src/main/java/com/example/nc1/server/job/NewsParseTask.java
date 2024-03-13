@@ -41,60 +41,56 @@ public class NewsParseTask {
 		String domain = "https://www.pravda.com.ua";
 		String urlNews = domain + "/rus/news/";
 
-		try {
-			Document doc = JsoupTools.connect(urlNews);
+		Document doc = JsoupTools.connect(urlNews);
 
-			for (Element el: doc.getElementsByClass("article_news_list")) {
-				String title = null;
-				String url = null;
-				String description = null;
-				String time = JsoupTools.getTextByClass(el, "article_time");
+		for (Element el: doc.getElementsByClass("article_news_list")) {
+			String title = null;
+			String url = null;
+			String description = null;
+			String time = JsoupTools.getTextByClass(el, "article_time");
 
-				for (Element elTitle: el.getElementsByClass("article_header")){
-					title = JsoupTools.getTextByTag(elTitle, "a");
-					url = JsoupTools.getTextByAttributeInTag(elTitle, "href", "a");
-				}
-
-				if (url != null){
-					if (!url.contains("https://"))
-						url = domain + url;
-
-					Document docDescription = JsoupTools.connect(url);
-					description = JsoupTools.getTextByClass(docDescription, postKeys[0]);
-
-					for (int i = 1; i < postKeys.length && (description == null || description.isEmpty()); i++){
-						description = JsoupTools.getTextByClass(docDescription, postKeys[i]);
-					}
-
-					if (description == null)
-						description = title;
-				}
-
-				long t = 0;
-
-				if (time != null){
-					String[] a = time.split(":");
-
-					int minute = Integer.parseInt(a[1]);
-					int hour = Integer.parseInt(a[0]);
-
-					t = (hour * 60L + minute) * 60 * 1000;
-				}
-
-				if (!newsService.isExist(title)) {
-					News obj = new News();
-
-					obj.setTitle(title);
-					obj.setTime(t);
-					obj.setDescription(description);
-					obj.setUrl(url);
-					obj.setDay(new GregorianCalendar().get(Calendar.DAY_OF_MONTH));
-
-					newsService.save(obj);
-				}
+			for (Element elTitle: el.getElementsByClass("article_header")){
+				title = JsoupTools.getTextByTag(elTitle, "a");
+				url = JsoupTools.getTextByAttributeInTag(elTitle, "href", "a");
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
+
+			if (url != null){
+				if (!url.contains("https://"))
+					url = domain + url;
+
+				Document docDescription = JsoupTools.connect(url);
+				description = JsoupTools.getTextByClass(docDescription, postKeys[0]);
+
+				for (int i = 1; i < postKeys.length && (description == null || description.isEmpty()); i++){
+					description = JsoupTools.getTextByClass(docDescription, postKeys[i]);
+				}
+
+				if (description == null)
+					description = title;
+			}
+
+			long t = 0;
+
+			if (time != null){
+				String[] a = time.split(":");
+
+				int minute = Integer.parseInt(a[1]);
+				int hour = Integer.parseInt(a[0]);
+
+				t = (hour * 60L + minute) * 60 * 1000;
+			}
+
+			if (!newsService.isExist(title)) {
+				News obj = new News();
+
+				obj.setTitle(title);
+				obj.setTime(t);
+				obj.setDescription(description);
+				obj.setUrl(url);
+				obj.setDay(new GregorianCalendar().get(Calendar.DAY_OF_MONTH));
+
+				newsService.save(obj);
+			}
 		}
 
 		StatusApplication.setStatus(StatusApplication.Status.SCAN_NEWS_END);

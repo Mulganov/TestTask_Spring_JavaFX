@@ -53,11 +53,18 @@ public class JsoupTools {
         return getTextByAttribute(elTag, attribute);
     }
 
-    public static Document connect(String url) throws IOException {
-        return Jsoup.connect(url)
-                .userAgent("Mozilla")
-                .timeout(5000)
-                .referrer("https://google.com")
-                .get();
+    public static Document connect(String url) {
+        Document document = null;
+        try {
+            document = Jsoup.connect(url)
+                    .userAgent("Mozilla")
+                    .timeout(5000)
+                    .referrer("https://google.com")
+                    .get();
+        } catch (IOException e) {
+            return connect(url);
+        }
+
+        return document;
     }
 }

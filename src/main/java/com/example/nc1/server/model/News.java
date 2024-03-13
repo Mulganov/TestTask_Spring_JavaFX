@@ -8,14 +8,16 @@ public class News {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	@Column(columnDefinition="text")
+	@Column(columnDefinition="text", name="valueTitle")
 	private String title;
-	@Column(columnDefinition="text")
+	@Column(columnDefinition="text", name="valueDescription")
 	private String description;
+	@Column(columnDefinition="int", name="valueTime")
 	private long time;
-	@Column(columnDefinition="text")
+	@Column(columnDefinition="text", name="valueUrl")
 	private String url;
-	private int day;
+	@Column(columnDefinition="int", name="valueDay")
+	private long day;
 	public long getId() {
 		return id;
 	}
@@ -53,11 +55,11 @@ public class News {
 		this.url = url;
 	}
 
-	public int getDay() {
+	public long getDay() {
 		return day;
 	}
 
-	public void setDay(int day) {
+	public void setDay(long day) {
 		this.day = day;
 	}
 }
