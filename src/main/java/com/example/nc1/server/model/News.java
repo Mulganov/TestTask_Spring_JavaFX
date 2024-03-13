@@ -8,9 +8,9 @@ public class News {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
-	//@Column(columnDefinition="text")
+	@Column(columnDefinition="text")
 	private String title;
-	//@Column(columnDefinition="text")
+	@Column(columnDefinition="text")
 	private String description;
 	private long time;
 	@Column(columnDefinition="text")
