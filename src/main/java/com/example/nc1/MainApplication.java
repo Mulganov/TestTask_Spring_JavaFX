@@ -62,6 +62,8 @@ public class MainApplication implements IApplication.OnClose{
 				if (values.size() == 4 ){
 					if (values.get(values.size() - 1) == StatusApplication.Status.INIT_SERVER_BEGIN){
 						clientApplication.downloadNews();
+
+						StatusApplication.STATUS.removeObserver(this);
 					}
 				}
 			}
